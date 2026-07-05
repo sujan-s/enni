@@ -18,18 +18,18 @@ Answers, per day / 7 days / 30 days:
 ## Install
 
 ```sh
-npm install enni
+npm install enni-analytics
 ```
 
 ## Set up the table (two commands)
 
 ```sh
-bash node_modules/enni/setup/create-table.sh enni-counters ap-south-1
+bash node_modules/enni-analytics/setup/create-table.sh enni-counters ap-south-1
 ```
 
 That runs `create-table` (on-demand billing, so idle cost is zero) and enables
 TTL — counters expire after 400 days. Then attach
-`node_modules/enni/setup/iam-policy.json` (fill in the table ARN) to your
+`node_modules/enni-analytics/setup/iam-policy.json` (fill in the table ARN) to your
 compute role. The policy grants exactly two actions: `dynamodb:UpdateItem` and
 `dynamodb:Query`.
 
@@ -48,7 +48,7 @@ Environment variables:
 // app/analytics.tsx
 'use client'
 import { useEffect } from 'react'
-import { init } from 'enni/client'
+import { init } from 'enni-analytics/client'
 
 export function Analytics() {
   useEffect(() => {
@@ -69,7 +69,7 @@ server only ever sees anonymous edge counts), the external referrer host on
 entry, and a mobile/desktop flag. It is a no-op when Do Not Track or Global
 Privacy Control is on, and fails silently.
 
-Prefer a plain script tag? Copy `node_modules/enni/dist/collector.global.js`
+Prefer a plain script tag? Copy `node_modules/enni-analytics/dist/collector.global.js`
 to `public/enni.js` and add
 `<script defer src="/enni.js" data-endpoint="/api/hit"></script>`.
 
@@ -77,8 +77,8 @@ to `public/enni.js` and add
 
 ```ts
 // app/api/hit/route.ts
-import { createHitHandler } from 'enni'
-import { DynamoStore } from 'enni/dynamo'
+import { createHitHandler } from 'enni-analytics'
+import { DynamoStore } from 'enni-analytics/dynamo'
 
 const store = new DynamoStore() // reads ENNI_TABLE
 export const POST = createHitHandler({ store, utcOffsetMinutes: 330 }) // 330 = IST days
@@ -88,8 +88,8 @@ export const POST = createHitHandler({ store, utcOffsetMinutes: 330 }) // 330 = 
 
 ```ts
 // app/enni/route.ts
-import { createAdminHandler } from 'enni'
-import { DynamoStore } from 'enni/dynamo'
+import { createAdminHandler } from 'enni-analytics'
+import { DynamoStore } from 'enni-analytics/dynamo'
 
 export const dynamic = 'force-dynamic'
 const store = new DynamoStore()
@@ -130,7 +130,7 @@ card.
 LCP, CLS and INP into good/ok/poor histograms — no timings stored.
 
 ```tsx
-import { vitals } from 'enni/vitals'
+import { vitals } from 'enni-analytics/vitals'
 useEffect(() => { init(); vitals() }, [])
 ```
 
@@ -208,13 +208,13 @@ pnpm build && pnpm preview
 
 | Export | From | What |
 |---|---|---|
-| `init(opts?)` | `enni/client` | start the collector, returns `track` |
-| `vitals(endpoint?)` | `enni/vitals` | optional web-vitals buckets |
-| `createHitHandler(opts)` | `enni` | `POST` route handler (standard `Request` → `Response`) |
-| `createAdminHandler(opts)` | `enni` | `GET` dashboard + JSON route handler |
-| `DynamoStore` | `enni/dynamo` | production counter store |
-| `MemoryStore` | `enni` | dev/test counter store |
-| `CounterStore` | `enni` | interface, if you want another backend |
+| `init(opts?)` | `enni-analytics/client` | start the collector, returns `track` |
+| `vitals(endpoint?)` | `enni-analytics/vitals` | optional web-vitals buckets |
+| `createHitHandler(opts)` | `enni-analytics` | `POST` route handler (standard `Request` → `Response`) |
+| `createAdminHandler(opts)` | `enni-analytics` | `GET` dashboard + JSON route handler |
+| `DynamoStore` | `enni-analytics/dynamo` | production counter store |
+| `MemoryStore` | `enni-analytics` | dev/test counter store |
+| `CounterStore` | `enni-analytics` | interface, if you want another backend |
 
 Handlers take and return web-standard `Request`/`Response`, so they work
 anywhere that speaks them (Next.js route handlers today; others untested).
