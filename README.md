@@ -38,7 +38,7 @@ Environment variables:
 | Variable | Purpose |
 |---|---|
 | `ENNI_TABLE` | DynamoDB table name |
-| `ANALYTICS_PASSWORD` | password for `/enni` (any username) |
+| `ENNI_PASSWORD` | password for `/enni` (any username) |
 
 ## Wire it into Next.js (App Router)
 
@@ -101,7 +101,7 @@ export const GET = createAdminHandler({
 ```
 
 Browse the site, then open `/enni` (any username, password from
-`ANALYTICS_PASSWORD`). That's the whole integration.
+`ENNI_PASSWORD`). That's the whole integration.
 
 > Set `utcOffsetMinutes` to the same value in both handlers; it shifts the
 > **day bucketing** (write and read) away from UTC, e.g. 330 for IST.

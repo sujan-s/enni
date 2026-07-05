@@ -5,7 +5,7 @@ import type { CounterStore } from './types'
 
 export interface AdminOptions {
   store: CounterStore
-  /** Dashboard password. Defaults to the `ANALYTICS_PASSWORD` env var. */
+  /** Dashboard password. Defaults to the `ENNI_PASSWORD` env var. */
   password?: string
   /** Shown in the dashboard header; falls back to the browser host. */
   siteName?: string
@@ -17,7 +17,7 @@ export interface AdminOptions {
 
 /**
  * The dashboard endpoint, behind HTTP Basic auth (any username, the
- * password from `ANALYTICS_PASSWORD`). Mount as a Next.js route handler:
+ * password from `ENNI_PASSWORD`). Mount as a Next.js route handler:
  *
  *   // app/enni/route.ts
  *   export const GET = createAdminHandler({ store })
@@ -28,9 +28,9 @@ export interface AdminOptions {
 export function createAdminHandler(opts: AdminOptions): (req: Request) => Promise<Response> {
   return async (req) => {
     if (req.method !== 'GET' && req.method !== 'HEAD') return new Response(null, { status: 405 })
-    const password = opts.password ?? process.env.ANALYTICS_PASSWORD
+    const password = opts.password ?? process.env.ENNI_PASSWORD
     if (!password)
-      return new Response('Set ANALYTICS_PASSWORD to enable the dashboard.', { status: 503 })
+      return new Response('Set ENNI_PASSWORD to enable the dashboard.', { status: 503 })
     if (!authorised(req.headers.get('authorization'), password))
       return new Response('Authentication required.', {
         status: 401,

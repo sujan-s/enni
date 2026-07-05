@@ -27,12 +27,12 @@ describe('createAdminHandler', () => {
 
   it('refuses to run without a configured password', async () => {
     const bare = createAdminHandler({ store, now: NOW })
-    const prev = process.env.ANALYTICS_PASSWORD
-    delete process.env.ANALYTICS_PASSWORD
+    const prev = process.env.ENNI_PASSWORD
+    delete process.env.ENNI_PASSWORD
     try {
       expect((await bare(get('/enni'))).status).toBe(503)
     } finally {
-      if (prev !== undefined) process.env.ANALYTICS_PASSWORD = prev
+      if (prev !== undefined) process.env.ENNI_PASSWORD = prev
     }
   })
 
