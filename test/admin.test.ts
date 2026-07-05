@@ -15,13 +15,13 @@ describe('createAdminHandler', () => {
   const handler = createAdminHandler({ store, password: 'letmein', siteName: 'DBIE', now: NOW })
 
   it('challenges without credentials', async () => {
-    const res = await handler(get('/admin'))
+    const res = await handler(get('/enni'))
     expect(res.status).toBe(401)
     expect(res.headers.get('www-authenticate')).toContain('Basic')
   })
 
   it('rejects a wrong password', async () => {
-    const res = await handler(get('/admin', { authorization: 'Basic ' + btoa('x:wrong') }))
+    const res = await handler(get('/enni', { authorization: 'Basic ' + btoa('x:wrong') }))
     expect(res.status).toBe(401)
   })
 
@@ -30,14 +30,14 @@ describe('createAdminHandler', () => {
     const prev = process.env.ANALYTICS_PASSWORD
     delete process.env.ANALYTICS_PASSWORD
     try {
-      expect((await bare(get('/admin'))).status).toBe(503)
+      expect((await bare(get('/enni'))).status).toBe(503)
     } finally {
       if (prev !== undefined) process.env.ANALYTICS_PASSWORD = prev
     }
   })
 
   it('serves the self-contained dashboard', async () => {
-    const res = await handler(get('/admin', AUTH))
+    const res = await handler(get('/enni', AUTH))
     expect(res.status).toBe(200)
     expect(res.headers.get('content-type')).toContain('text/html')
     const html = await res.text()
@@ -62,7 +62,7 @@ describe('createAdminHandler', () => {
     await beacon({ p: '/b', r: '/a' })
     await beacon({ p: '/search', e: 's0', v: 'msme credit' })
 
-    const res = await handler(get('/admin?data=1&range=week', AUTH))
+    const res = await handler(get('/enni?data=1&range=week', AUTH))
     expect(res.status).toBe(200)
     const json = await res.json()
     expect(json.days).toHaveLength(7)
@@ -83,7 +83,7 @@ describe('createAdminHandler', () => {
       siteName: '<script>alert(1)</script>',
       now: NOW,
     })
-    const html = await (await xss(get('/admin', AUTH))).text()
+    const html = await (await xss(get('/enni', AUTH))).text()
     expect(html).not.toContain('<script>alert(1)</script>')
     expect(html).toContain('&lt;script&gt;')
   })

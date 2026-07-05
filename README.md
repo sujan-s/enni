@@ -38,7 +38,7 @@ Environment variables:
 | Variable | Purpose |
 |---|---|
 | `ENNI_TABLE` | DynamoDB table name |
-| `ANALYTICS_PASSWORD` | password for `/admin` (any username) |
+| `ANALYTICS_PASSWORD` | password for `/enni` (any username) |
 
 ## Wire it into Next.js (App Router)
 
@@ -87,7 +87,7 @@ export const POST = createHitHandler({ store, utcOffsetMinutes: 330 }) // 330 = 
 **3. The dashboard:**
 
 ```ts
-// app/admin/route.ts
+// app/enni/route.ts
 import { createAdminHandler } from 'enni'
 import { DynamoStore } from 'enni/dynamo'
 
@@ -100,7 +100,7 @@ export const GET = createAdminHandler({
 })
 ```
 
-Browse the site, then open `/admin` (any username, password from
+Browse the site, then open `/enni` (any username, password from
 `ANALYTICS_PASSWORD`). That's the whole integration.
 
 > Set `utcOffsetMinutes` to the same value in both handlers; it shifts the
@@ -181,7 +181,7 @@ Everything is options, not constants:
 
 ```sh
 pnpm build && pnpm preview
-# → http://localhost:4321/admin  (password: preview, seeded sample data)
+# → http://localhost:4321/enni  (password: preview, seeded sample data)
 ```
 
 ## Amplify notes (first deployment)
@@ -199,10 +199,10 @@ pnpm build && pnpm preview
   there is no third-party fallback by design, so nothing else breaks.
 - **Compute role** (open question 2): attach the IAM policy to the app's SSR
   compute role (Amplify console → App settings → IAM roles). Verify with one
-  browse-then-check-`/admin` round trip.
+  browse-then-check-`/enni` round trip.
 - **CSP**: the dashboard is one self-contained HTML page with inline CSS/JS
   and zero external requests. If you enforce a strict CSP, allow
-  `'unsafe-inline'` for `/admin` only (it sits behind Basic auth).
+  `'unsafe-inline'` for `/enni` only (it sits behind Basic auth).
 
 ## API surface
 

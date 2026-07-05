@@ -19,7 +19,7 @@ export interface AdminOptions {
  * The dashboard endpoint, behind HTTP Basic auth (any username, the
  * password from `ANALYTICS_PASSWORD`). Mount as a Next.js route handler:
  *
- *   // app/admin/route.ts
+ *   // app/enni/route.ts
  *   export const GET = createAdminHandler({ store })
  *
  * A plain GET serves the self-contained dashboard; `?data=1&range=…`

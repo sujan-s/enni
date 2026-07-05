@@ -1,4 +1,4 @@
-// Local preview: serves the admin dashboard on http://localhost:4321/admin
+// Local preview: serves the admin dashboard on http://localhost:4321/enni
 // with seeded sample data (password: preview). No AWS needed.
 import { createServer } from 'node:http'
 import { createAdminHandler, createHitHandler, MemoryStore } from '../dist/index.js'
@@ -53,5 +53,5 @@ createServer(async (req, res) => {
   res.writeHead(out.status, Object.fromEntries(out.headers))
   res.end(Buffer.from(await out.arrayBuffer()))
 }).listen(4321, () => {
-  console.log('Dashboard: http://localhost:4321/admin  (any username, password: preview)')
+  console.log('Dashboard: http://localhost:4321/enni  (any username, password: preview)')
 })
