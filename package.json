@@ -12,7 +12,14 @@
     "cookieless"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sujan-s/enni.git"
+  },
+  "homepage": "https://github.com/sujan-s/enni#readme",
+  "bugs": "https://github.com/sujan-s/enni/issues",
   "type": "module",
+  "packageManager": "pnpm@11.1.2",
   "sideEffects": false,
   "engines": {
     "node": ">=18"
@@ -52,7 +59,7 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "preview": "node scripts/preview.mjs",
-    "prepublishOnly": "npm run typecheck && npm run build && npm test"
+    "prepublishOnly": "pnpm typecheck && pnpm build && pnpm test"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.600.0"

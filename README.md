@@ -180,7 +180,7 @@ Everything is options, not constants:
 ## Local preview
 
 ```sh
-npm run build && npm run preview
+pnpm build && pnpm preview
 # → http://localhost:4321/admin  (password: preview, seeded sample data)
 ```
 
