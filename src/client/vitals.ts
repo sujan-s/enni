@@ -6,9 +6,7 @@
  */
 export function vitals(endpoint = '/api/hit'): void {
   if (typeof window === 'undefined' || !('PerformanceObserver' in window)) return
-  const nav = navigator
-  if (nav.doNotTrack === '1' || (nav as { globalPrivacyControl?: boolean }).globalPrivacyControl)
-    return
+  if (navigator.doNotTrack === '1') return
 
   let lcp = 0
   let cls = 0

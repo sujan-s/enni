@@ -1,6 +1,6 @@
 {
   "name": "enni-analytics",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "First-party, counter-only web analytics: a ~1KB collector, one API route handler, and a password-protected admin dashboard, storing only anonymous counters in DynamoDB.",
   "keywords": [
     "analytics",

@@ -66,8 +66,8 @@ export function Analytics() {
 It counts the first page, auto-tracks SPA route changes via the history API,
 reports the page-to-page transition edge (kept in `sessionStorage`, so the
 server only ever sees anonymous edge counts), the external referrer host on
-entry, and a mobile/desktop flag. It is a no-op when Do Not Track or Global
-Privacy Control is on, and fails silently.
+entry, and a mobile/desktop flag. It is a no-op when Do Not Track is on (see
+[Privacy signals](#privacy-signals)), and fails silently.
 
 Prefer a plain script tag? Copy `node_modules/enni-analytics/dist/collector.global.js`
 to `public/enni.js` and add
@@ -150,6 +150,28 @@ increments, so nothing per-visitor *can* be stored:
 
 Abuse of the open collector endpoint is therefore noise, not a breach; it is
 additionally origin-checked and rate limited (token bucket per IP, in memory).
+
+## Privacy signals
+
+The collector honours **Do Not Track** (`navigator.doNotTrack === "1"`) and
+becomes a complete no-op when it is set.
+
+It deliberately does **not** honour **Global Privacy Control** (as of 0.2.0).
+GPC's defined legal meaning — under CCPA/CPRA and similar regimes — is an
+opt-out of the *sale or sharing of personal information*. enni processes no
+personal information at all: no identifiers, no IPs, no fingerprints, only
+anonymous aggregate counters, so there is nothing a GPC opt-out could apply
+to. Honouring it anyway would silently exclude entire browser populations
+(GPC is on by default in Brave, and in Firefox private windows) and skew
+counts while providing no privacy benefit beyond what counter-only storage
+already guarantees.
+
+If your compliance posture demands treating GPC like DNT regardless, gate
+`init()` yourself:
+
+```ts
+if (!(navigator as { globalPrivacyControl?: boolean }).globalPrivacyControl) init()
+```
 
 ## Data model
 

@@ -17,16 +17,16 @@ declare global {
  * Start the collector: counts the current page, auto-tracks SPA route
  * changes (history API), reports page-to-page flow edges from
  * sessionStorage, the external referrer host on entry, and device class.
- * No cookies, no identifiers; a no-op when Do Not Track or Global
- * Privacy Control is on. Safe to call more than once.
+ * No cookies, no identifiers; a no-op when Do Not Track is on (GPC is
+ * deliberately not honoured — see "Privacy signals" in the README).
+ * Safe to call more than once.
  */
 export function init(opts: EnniOptions = {}): Track {
   if (typeof window === 'undefined') return () => {}
   const w = window
   if (w.__enni) return w.__enni
   const nav = navigator
-  const off =
-    nav.doNotTrack === '1' || (nav as { globalPrivacyControl?: boolean }).globalPrivacyControl
+  const off = nav.doNotTrack === '1'
   const ep = opts.endpoint || '/api/hit'
 
   const send = (body: Record<string, string>) => {
